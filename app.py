@@ -1,7 +1,7 @@
 from flask import Flask, request, jsonify, render_template
 import json
 
-app = Flask(_name_)
+app = Flask(__name__)
 
 with open("recommendations.json") as f:
     data = json.load(f)

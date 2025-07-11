@@ -4,19 +4,19 @@ import os
 
 app = Flask(__name__)
 
-# Load recommendations.json using the correct path
-json_path = os.path.join(os.path.dirname(_file_), "recommendations.json")
+# ✅ Correct way to get the full path to the JSON file
+json_path = os.path.join(os.path.dirname(__file__), "recommendations.json")
 with open(json_path) as f:
     data = json.load(f)
 
-@app.route('/')
+@app.route("/")
 def home():
-    return render_template('index.html')
+    return render_template("index.html")
 
-@app.route('/recommend', methods=['GET'])
+@app.route("/recommend", methods=["GET"])
 def recommend():
     movie = request.args.get("movie")
-    recs = data.get(movie, [])[:4]  # Limit to first 4 recommendations
+    recs = data.get(movie, [])[:4]
     return jsonify(recommendations=recs)
 
 if __name__ == "__main__":

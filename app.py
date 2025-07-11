@@ -2,7 +2,7 @@ from flask import Flask, request, jsonify, render_template
 import json
 import os
 
-app = Flask(_name_)
+app = Flask(__name__)
 
 # Load recommendations.json using the correct path
 json_path = os.path.join(os.path.dirname(_file_), "recommendations.json")
@@ -19,5 +19,5 @@ def recommend():
     recs = data.get(movie, [])[:4]  # Limit to first 4 recommendations
     return jsonify(recommendations=recs)
 
-if _name_ == "_main_":
+if __name__ == "__main__":
     app.run()

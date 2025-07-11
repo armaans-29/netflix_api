@@ -16,5 +16,5 @@ def recommend():
     recs = data.get(movie, [])
     return jsonify(recommendations=recs)
 
-if __name_ == "__main__":
+if __name__ == "__main__":
     app.run(debug=True)

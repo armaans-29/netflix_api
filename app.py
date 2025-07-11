@@ -1,23 +1,21 @@
-from flask import Flask, request, jsonify, render_template
+from flask import Flask, request, render_template
 import json
 import os
 
 app = Flask(__name__)
 
-# Load data
+# Load recommendations and normalize keys to lowercase
 json_path = os.path.join(os.path.dirname(__file__), "recommendations.json")
 with open(json_path) as f:
-    data = json.load(f)
+    raw_data = json.load(f)
+    data = {k.lower(): v for k, v in raw_data.items()}  # <-- normalize keys
 
 @app.route("/")
-def home():
+def index():
     return render_template("index.html")
 
 @app.route("/recommend", methods=["GET"])
 def recommend():
-    movie = request.args.get("movie")
+    movie = request.args.get("movie", "").lower()  # <-- convert user input to lowercase
     recs = data.get(movie, [])
     return render_template("index.html", recommendations=recs, movie=movie)
-
-if __name__ == "__main__":
-    app.run()

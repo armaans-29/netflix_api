@@ -1,51 +1,89 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Netflix Recommender</title>
-  <link rel="stylesheet" href="/static/styles.css" />
+    <title>Netflix Movie Recommender</title>
+    <style>
+        body {
+            background-color: #000;
+            color: #fff;
+            font-family: 'Segoe UI', sans-serif;
+            text-align: center;
+            padding: 50px;
+            background-image: url('https://assets.nflxext.com/ffe/siteui/vlv3/2e464e3d-3c47-4dc7-b930-4eb9f05f95e7/b5ef2328-d118-45b3-890b-3df96c8f7775/IN-en-20230717-popsignuptwoweeks-perspective_alpha_website_medium.jpg');
+            background-size: cover;
+            background-repeat: no-repeat;
+        }
+
+        h1 {
+            font-size: 40px;
+            margin-bottom: 20px;
+            color: #e50914;
+        }
+
+        input[type="text"] {
+            padding: 12px;
+            width: 300px;
+            font-size: 18px;
+            border: none;
+            border-radius: 4px;
+        }
+
+        button {
+            padding: 12px 20px;
+            background-color: #e50914;
+            color: white;
+            font-size: 18px;
+            border: none;
+            border-radius: 4px;
+            margin-left: 10px;
+            cursor: pointer;
+        }
+
+        .recommendation-box {
+            margin-top: 40px;
+            background: rgba(0,0,0,0.7);
+            padding: 20px;
+            border-radius: 8px;
+            display: inline-block;
+        }
+
+        ul {
+            list-style-type: none;
+            padding: 0;
+        }
+
+        li {
+            font-size: 20px;
+            padding: 8px 0;
+            color: #fff;
+        }
+
+        .not-found {
+            font-size: 22px;
+            color: #ff9999;
+        }
+    </style>
 </head>
 <body>
-  <div class="container">
-    <h1>Netflix Movie Recommender</h1>
-    <input type="text" id="movieInput" placeholder="Enter a movie title..." />
-    <button onclick="getRecommendations()">Get Recommendations</button>
+    <h1>🎬 Netflix Movie Recommender</h1>
+    <form action="/recommend" method="get">
+        <input type="text" name="movie" placeholder="Type a movie name..." required>
+        <button type="submit">Get Recommendations</button>
+    </form>
 
-    <div id="resultArea">
-      <h2 id="recTitle" style="display: none;">These Are Your Recommendations:</h2>
-      <ul id="recommendations"></ul>
-    </div>
-  </div>
-
-  <script>
-    async function getRecommendations() {
-      const movie = document.getElementById("movieInput").value;
-      const res = await fetch(/recommend?movie=${encodeURIComponent(movie)});
-      const data = await res.json();
-
-      const resultTitle = document.getElementById("recTitle");
-      const list = document.getElementById("recommendations");
-      list.innerHTML = "";
-
-      if (data.recommendations.length > 0) {
-        resultTitle.style.display = "block";
-        let index = 0;
-        const interval = setInterval(() => {
-          if (index >= data.recommendations.length) {
-            clearInterval(interval);
-            return;
-          }
-          const li = document.createElement("li");
-          li.textContent = data.recommendations[index];
-          list.appendChild(li);
-          index++;
-        }, 500);
-      } else {
-        resultTitle.style.display = "none";
-        list.innerHTML = "<li>No recommendations found for this movie.</li>";
-      }
-    }
-  </script>
+    {% if recommendations is defined %}
+        {% if recommendations %}
+            <div class="recommendation-box">
+                <h2>These Are Your Recommendations:</h2>
+                <ul>
+                    {% for item in recommendations %}
+                        <li>{{ item }}</li>
+                    {% endfor %}
+                </ul>
+            </div>
+        {% else %}
+            <p class="not-found">No recommendations found for "{{ movie }}".</p>
+        {% endif %}
+    {% endif %}
 </body>
 </html>

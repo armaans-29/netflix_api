@@ -1,144 +1,104 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-    <meta charset="UTF-8">
     <title>Netflix Movie Recommender</title>
-    <link href="https://fonts.googleapis.com/css2?family=Baroque+Script&display=swap" rel="stylesheet">
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Baroque+Script&display=swap');
-
         body {
-            margin: 0;
-            padding: 0;
-            background-color: #141414;
-            font-family: 'Realife Moment à €', cursive;
-            color: white;
+            background-color: #000;
+            color: #fff;
+            font-family: 'Segoe UI', sans-serif;
             text-align: center;
+            padding: 50px;
+            background-image: url('https://assets.nflxext.com/ffe/siteui/vlv3/2e464e3d-3c47-4dc7-b930-4eb9f05f95e7/b5ef2328-d118-45b3-890b-3df96c8f7775/IN-en-20230717-popsignuptwoweeks-perspective_alpha_website_medium.jpg');
+            background-size: cover;
+            background-repeat: no-repeat;
         }
 
-        .container {
-            max-width: 600px;
-            margin: 100px auto;
-            padding: 30px;
-            background-color: rgba(0, 0, 0, 0.8);
-            border-radius: 15px;
-            box-shadow: 0 0 20px rgba(255, 0, 0, 0.6);
+        .logo {
+            margin-bottom: 30px;
+        }
+
+        .logo img {
+            height: 60px;
         }
 
         h1 {
-            color: #e50914;
             font-size: 40px;
-            margin-bottom: 25px;
+            margin-bottom: 20px;
+            color: #e50914;
         }
 
         input[type="text"] {
-            width: 80%;
             padding: 12px;
-            border-radius: 10px;
+            width: 300px;
+            font-size: 18px;
             border: none;
-            font-size: 16px;
-            outline: none;
-            margin-bottom: 20px;
+            border-radius: 4px;
         }
 
         button {
-            padding: 10px 25px;
+            padding: 12px 20px;
             background-color: #e50914;
             color: white;
+            font-size: 18px;
             border: none;
-            border-radius: 10px;
-            font-size: 16px;
+            border-radius: 4px;
+            margin-left: 10px;
             cursor: pointer;
         }
 
-        button:hover {
-            background-color: #b00610;
+        .recommendation-box {
+            margin-top: 40px;
+            background: rgba(0,0,0,0.7);
+            padding: 20px;
+            border-radius: 8px;
+            display: inline-block;
         }
 
-        .searched-movie {
-            font-family: 'Baroque Script', cursive;
-            font-size: 30px;
-            color: #ffffff;
-            margin-top: 35px;
-        }
-
-        .recommendation-title {
-            font-size: 24px;
-            margin-top: 15px;
-            color: #f3f3f3;
-        }
-
-        .recommendations {
-            margin-top: 15px;
-            list-style: none;
+        ul {
+            list-style-type: none;
             padding: 0;
-            animation: fadeInUp 0.8s ease-in-out;
         }
 
-        .recommendations li {
-            font-size: 18px;
-            padding: 6px 0;
+        li {
+            font-size: 20px;
+            padding: 8px 0;
+            color: #fff;
         }
 
-        @keyframes fadeInUp {
-            from {
-                opacity: 0;
-                transform: translateY(30px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
+        .not-found {
+            font-size: 22px;
+            color: #ff9999;
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <h1>Netflix Movie Recommender</h1>
-        <form id="recommendForm">
-            <input type="text" id="movieInput" placeholder="Enter a movie name">
-            <br>
-            <button type="submit">Get Recommendations</button>
-        </form>
 
-        <div id="resultArea" style="display:none;">
-            <div id="movieTitle" class="searched-movie"></div>
-            <div class="recommendation-title">These Are Your Recommendations:</div>
-            <ul class="recommendations" id="recommendationList"></ul>
-        </div>
+    <div class="logo">
+        <img src="https://upload.wikimedia.org/wikipedia/commons/0/08/Netflix_2015_logo.svg" alt="Netflix Logo">
     </div>
 
-    <script>
-        document.getElementById("recommendForm").addEventListener("submit", function (e) {
-            e.preventDefault();
-            const movie = document.getElementById("movieInput").value.trim();
-            if (!movie) return;
+    <h1>🎬 Netflix Movie Recommender</h1>
 
-            fetch(`/recommend?movie=${encodeURIComponent(movie)}`)
-                .then(response => response.json())
-                .then(data => {
-                    const movieTitle = document.getElementById("movieTitle");
-                    const resultArea = document.getElementById("resultArea");
-                    const recommendationList = document.getElementById("recommendationList");
+    <form action="/recommend" method="get">
+        <input type="text" name="movie" placeholder="Type a movie name..." required>
+        <button type="submit">Get Recommendations</button>
+    </form>
 
-                    movieTitle.textContent = movie;
-                    recommendationList.innerHTML = "";
+    {% if recommendations is defined %}
+        {% if recommendations %}
+            <div class="recommendation-box">
+                <h2>These Are Your Recommendations:</h2>
+                <ul>
+                    {% for item in recommendations %}
+                        <li>{{ item }}</li>
+                    {% endfor %}
+                </ul>
+            </div>
+        {% else %}
+            <p class="not-found">No recommendations found for "{{ movie }}".</p>
+        {% endif %}
+    {% endif %}
 
-                    if (data.recommendations.length > 0) {
-                        data.recommendations.forEach(rec => {
-                            const li = document.createElement("li");
-                            li.textContent = rec;
-                            recommendationList.appendChild(li);
-                        });
-                    } else {
-                        const li = document.createElement("li");
-                        li.textContent = "No recommendations found.";
-                        recommendationList.appendChild(li);
-                    }
-
-                    resultArea.style.display = "block";
-                });
-        });
-    </script>
 </body>
 </html>

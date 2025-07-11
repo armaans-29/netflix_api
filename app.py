@@ -1,23 +1,20 @@
-from flask import Flask, request, jsonify
+from flask import Flask, request, jsonify, render_template
 import json
 
-app = Flask(__name__)
+app = Flask(_name_)
 
 with open("recommendations.json") as f:
     data = json.load(f)
 
+@app.route("/")
+def home():
+    return render_template("index.html")
 
 @app.route("/recommend", methods=["GET"])
 def recommend():
-    movie = request.args.get("movie", "").strip().lower()
+    movie = request.args.get("movie")
+    recs = data.get(movie, [])
+    return jsonify(recommendations=recs)
 
-    # Try to find a matching key ignoring case
-    for key in data:
-        if key.lower() == movie:
-            return jsonify(recommendations=data[key][:4])
-
-    return jsonify(recommendations=[])
-
-
-if __name__ == "__main__":
-    app.run()
+if _name_ == "_main_":
+    app.run(debug=True)

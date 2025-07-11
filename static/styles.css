@@ -1,61 +1,60 @@
 body {
-  background-color: #141414;
+  background: #000000;
+  color: #ffffff;
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  color: white;
-  text-align: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
   margin: 0;
-  padding: 0;
 }
 
 .container {
-  max-width: 600px;
-  margin: 50px auto;
+  text-align: center;
   padding: 2rem;
-  background-color: #1f1f1f;
+  border: 2px solid #e50914;
   border-radius: 10px;
+  background-color: #141414;
   box-shadow: 0 0 20px #e50914;
-}
-
-.logo {
-  width: 180px;
-  margin-bottom: 20px;
+  width: 90%;
+  max-width: 500px;
 }
 
 input {
-  width: 80%;
-  padding: 0.8rem;
-  font-size: 1rem;
-  margin-top: 10px;
+  padding: 10px;
+  width: 70%;
   border: none;
   border-radius: 5px;
-  outline: none;
+  margin-bottom: 10px;
 }
 
 button {
-  margin-top: 10px;
-  padding: 0.8rem 1.5rem;
-  font-size: 1rem;
+  padding: 10px 20px;
   background-color: #e50914;
+  color: white;
   border: none;
   border-radius: 5px;
-  color: white;
   cursor: pointer;
-  transition: background 0.3s ease;
 }
 
 button:hover {
-  background-color: #b20710;
+  background-color: #f40612;
 }
 
 ul {
   list-style: none;
   padding: 0;
-  margin-top: 20px;
 }
 
-li {
-  background: #333;
-  margin: 5px 0;
+ul li {
+  margin: 10px 0;
   padding: 10px;
-  border-radius: 5px;
+  background-color: #222;
+  border-left: 4px solid #e50914;
+  animation: fadeIn 0.4s ease-in;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateX(-10px); }
+  to { opacity: 1; transform: translateX(0); }
 }
